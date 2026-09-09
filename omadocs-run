@@ -1,0 +1,8 @@
+#!/usr/bin/python
+"""Run from an Omarchy plugin checkout without pip or installation hooks."""
+from pathlib import Path
+import sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from omadocs.cli import main
+raise SystemExit(main())

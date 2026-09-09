@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.coverage
+.coverage.*
+.pytest_cache/
+.venv/
+*credentials*.json
+client_secret*.json
+*.db
+*.db-*
+*.sqlite*
+*.log
+*.tar.gz

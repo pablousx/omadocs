@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.pablousx.omadocs",
+  "name": "omadocs",
+  "version": "0.1.0",
+  "author": "pablousx",
+  "license": "MIT",
+  "description": "Upload a new Office file copy to Google Drive and open it in your browser. No synchronization.",
+  "kinds": ["service", "bar-widget"],
+  "entryPoints": {"service": "Service.qml", "barWidget": "BarWidget.qml"},
+  "barWidget": {
+    "displayName": "omadocs",
+    "description": "Office uploads, Google accounts, and MIME handlers",
+    "category": "Utilities",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
