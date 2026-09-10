@@ -2,6 +2,8 @@
 
 All project sources live in this repository root. The Python package is `omadocs/`; it is not a nested project. Run the executable `./omadocs-run` without packaging or virtualenv setup. Python dependencies are declared in `pyproject.toml`; on Omarchy use the system packages documented in the README. Tests use the standard library's `unittest`.
 
+For pull request CI, branch protections, maintainer bypass, and reusable ruleset templates, see [repository rules](repository-rules.md).
+
 ## Checks
 
 ```bash
