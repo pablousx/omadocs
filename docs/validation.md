@@ -39,3 +39,51 @@ No live Desktop OAuth credential file was supplied, and no maintainer client ID 
 Remaining release gates are maintainer-owned Desktop client provisioning, production consent/branding configuration, public-client-only OAuth validation, live account/refresh/upload checks, and manual observation of each returned Office link. A remote `omarchy plugin add <repository-url> --enable` clone has not been tested because this repository has not been published; its root manifest and local installation path were validated.
 
 See the release and screenshot checklists for broader release certification. Nothing was published.
+
+## Follow-up: desktop launch after development update
+
+The user subsequently reported successful credential import and Google account linking, followed by a DOCX open that produced no activity. Inspection reproduced a local `FileNotFoundError`: the desktop launcher referred to the runtime directory removed by the icon update. No upload operation had reached the helper.
+
+The launcher now resolves the active runtime through the installed manifest. Helper startup repairs unchanged, owned desktop resources without changing MIME preferences. Three regression tests cover launching after deletion of the previous runtime, retaining restoration behavior and intervening default changes, and preserving modified or absent launchers. **82 tests passed** after this fix. The installed launcher passed `--version` and reached redacted diagnostics, which confirmed one linked account; MIME settings checksums were unchanged. Retrying the user's DOCX and observing the Google landing page remain pending.
+
+## Follow-up: UX revision
+
+The user subsequently confirmed that opening the document works. This is user-reported DOCX success; XLSX, PPTX, and detailed browser landing behavior have not been independently observed.
+
+The panel now has three destinations: Uploads, Accounts, and Settings. Uploads provides a file chooser, attention/active/recent filters, progress, account selection, and contextual recovery actions. Accounts has guided setup, inline editing, and confirmation before removal. Settings groups infrequent tasks in expandable sections. Actions have independent busy states, duplicate-click protection, acknowledgement-based feedback, keyboard focus, and recoverable errors. Background updates preserve input drafts and row identity.
+
+- **89 Python tests passed**, including seven file-picker cases. The picker subset passed again after the final child-environment adjustment.
+- **18 UI scenarios passed** (22 QtTest passes including setup/cleanup): action acknowledgements/errors, duplicate clicks, disconnect behavior, independent busy states, stable row identity/focus, filters, progress formatting, browser failure presentation, credential drafts, account management, and cancellation confirmation. These tests use real view/bridge logic with theme stand-ins, not Google services.
+- All three redesigned tabs were visually inspected in the native shell theme. Settings sections default to collapsed. Screenshots remain outside the repository because they include private desktop context.
+- QML validation passed without warnings against installed Quattro imports, and the root manifest validated successfully.
+- Native dialog testing exposed a GTK3/GVFS crash when embedding QtQuick.Dialogs in Quickshell. That implementation was removed. The final picker runs in a separate process, with a local chooser that avoids a subsequently reproduced desktop portal cancellation hang. A native open/Escape test returned `{"cancelled": true}` and exited normally, without submitting a file.
+- The installed panel’s own Upload files → Escape flow was also verified: cancellation reopened the panel, restored the enabled Upload files button, and left the existing upload unchanged. No plugin-specific QML warnings/errors appeared in the final installation log check.
+
+The linked account and existing completed upload were preserved. No additional live upload was used for this UX validation.
+
+## Follow-up: stable notification footer
+
+Date: 2026-09-09. Removed the permanent Drive-copy sentence and moved panel notifications below the page into a reserved two-line footer. Message changes, dismissal, and setup-button visibility cannot change the footer height. Truncated text is available in a hover tooltip; notification priority and existing actions are preserved.
+
+The UI suite passed 22 scenarios (28 QtTest passes including fixture setup/cleanup), including unchanged content/footer geometry across all three pages for empty, success, reconnecting, sign-in, and long-error states, plus tooltip and footer action checks. QML and manifest validation passed.
+
+## Release preparation — September 9, 2026
+
+The maintainer reports that the Google Cloud project has been published to production. The repository `pablousx/omadocs` is publicly readable, the display name is lowercase `omadocs`, and its permanent plugin ID remains unchanged.
+
+- **94 Python tests passed**, including five new bundled-client parsing, default-selection, custom-client precedence, refresh, and readiness checks. The **22 UI scenarios** (28 QtTest passes), QML validation, site checks, and root manifest validation passed.
+- Live token refresh with the already connected account returned HTTP 400 `invalid_request` when only the client ID was supplied. The otherwise identical request using the existing Desktop client's `client_secret` succeeded. No credential values were printed, no account data was overwritten, and this check did not upload files or validate a new user's consent flow.
+- The bundled-client loader now accepts only a bounded `client_id` and optional Desktop application `client_secret`. Readiness checks validate the bundle instead of treating any existing file as configured. Custom client precedence and existing account associations are preserved.
+- No production OAuth bundle has been written yet: publishing the Desktop `client_secret` differs from the earlier client-ID-only plan and awaits the maintainer's explicit choice. The release checker refuses a built-in-sign-in release without a valid bundle.
+- The publication tree and existing Git history passed credential-signature checks. `preview.png` was generated from the project website with fictional files and accounts. The marketplace submission draft uses Productivity with bar/quickshell tags; no existing submission was found.
+- Git transport works, but the saved GitHub CLI token is invalid. GitHub release creation and marketplace submission await renewed CLI authentication. No release commit, tag, push, or marketplace issue was created during this preparation.
+
+## Version 0.1.0 publication validation — September 9, 2026
+
+The earlier dated records describe the state at each validation stage. They do not supersede this publication record.
+
+The maintainer authorized publication after reviewing Desktop client reuse and billing risks. The approved `client_id` and Desktop application `client_secret` were extracted from omadocs' configured client into `assets/oauth-client.json`; no user credentials or tokens were included. Live refresh with this exact bundle passed without replacing the existing account's stored tokens. GitHub authentication is working and the maintainer's remote `CNAME` commit was incorporated without overwriting it. Cloud billing settings were not inspected or changed.
+
+The built-in path is covered by the automated bundle/default/refresh tests. A fresh user's Google consent with the packaged release, live XLSX/PPTX browser behavior, and installation in a separate clean Quattro profile remain unverified. Version 0.1.0 is an initial release with those documented limitations, not a claim of complete production certification.
+
+Final pre-publication checks passed: **94 Python tests** (5.840 seconds), **22 UI scenarios / 28 QtTest passes**, QML validation without warnings, root manifest validation, static site checks, release artifact/credential checks, and `git diff --check`. No tests were skipped.

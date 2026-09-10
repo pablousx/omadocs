@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en" data-theme="night">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="What omadocs accesses, where your data goes, and the choices you have. For both the desktop plugin and this website."
+    />
+    <meta name="theme-color" content="#1a1b26" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Privacy policy — omadocs" />
+    <meta
+      property="og:description"
+      content="What omadocs accesses, where your data goes, and the choices you have. For both the desktop plugin and this website."
+    />
+    <meta property="og:site_name" content="omadocs" />
+    <title>Privacy policy — omadocs</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/site.css" />
+    <script src="assets/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="omadocs home"
+          ><svg viewBox="0 0 26 32" fill="none" aria-hidden="true">
+            <path
+              d="M3 2h13l7 7v21H3zM16 2v8h7M7 16h12M7 21h12M7 26h8"
+              stroke="currentColor"
+              stroke-width="1.7"
+            /></svg
+          ><span>omadocs<span class="accent">.</span></span></a
+        >
+        <nav class="site-nav" aria-label="Main navigation">
+          <a class="desktop-link" href="index.html#how-it-works"
+            >How it works</a
+          >
+          <a href="index.html#install">Install</a>
+          <a href="https://github.com/pablousx/omadocs"
+            >GitHub <span aria-hidden="true">↗</span></a
+          >
+          <button
+            class="theme-button"
+            type="button"
+            data-theme-toggle
+            hidden
+            aria-label="Change color theme"
+          >
+            <span class="theme-swatch" aria-hidden="true"></span
+            ><span data-theme-name>Tokyo Night</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="container">
+        <header class="legal-hero">
+          <div class="breadcrumb">
+            <a href="index.html">omadocs</a> / privacy policy
+          </div>
+          <div class="eyebrow">THE DETAILS, IN THE OPEN</div>
+          <h1>Privacy policy<span class="accent">.</span></h1>
+          <p class="lede">
+            What omadocs accesses, where your data goes, and the choices you
+            have. For both the desktop plugin and this website.
+          </p>
+          <p class="legal-date">
+            Effective September 9, 2026 · Maintained by pablousx
+          </p>
+        </header>
+        <div class="legal-layout">
+          <nav class="legal-nav" aria-label="On this page">
+            <p>On this page</p>
+            <a href="#about">01 / Who this policy covers</a
+            ><a href="#data">02 / Data the plugin uses</a
+            ><a href="#google-access">03 / Google access and use</a
+            ><a href="#retention">04 / Storage and retention</a
+            ><a href="#choices">05 / Your controls</a
+            ><a href="#website">06 / This website</a
+            ><a href="#support">07 / Support and contact</a
+            ><a href="#changes">08 / Policy changes</a>
+          </nav>
+          <article class="legal-body" aria-label="Privacy policy">
+            <div class="legal-callout">
+              <p>
+                <strong>The short version:</strong> the plugin sends files you
+                select directly to Google Drive. Account credentials stay in
+                your local keyring. The project does not operate an upload
+                server or add advertising or analytics trackers.
+              </p>
+            </div>
+            <section id="about" aria-labelledby="about-title">
+              <h2 id="about-title">
+                <span class="index">01</span>Who this policy covers
+              </h2>
+              <p>
+                omadocs is an independent open-source project maintained by
+                <a href="https://github.com/pablousx">pablousx</a>. This policy
+                describes the official omadocs desktop plugin and this project
+                website. It does not cover independently modified versions,
+                Google’s services, or GitHub’s own processing.
+              </p>
+              <p>
+                You do not create an omadocs website account. Google sign-in
+                happens in your browser through Google’s authorization flow.
+              </p>
+            </section>
+            <section id="data" aria-labelledby="data-title">
+              <h2 id="data-title">
+                <span class="index">02</span>Data the plugin uses
+              </h2>
+              <p>
+                The plugin processes the following information on your computer
+                to carry out your requests:
+              </p>
+              <table class="legal-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Information</th>
+                    <th scope="col">Purpose and location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Selected file contents</td>
+                    <td>
+                      A private local snapshot allows a reliable upload. The
+                      selected content and filename are sent directly to Google
+                      Drive.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Account identity</td>
+                    <td>
+                      Google account email and permission identifier identify
+                      the upload owner and verify reconnection. These and any
+                      account nickname are stored locally.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Authorization material</td>
+                    <td>
+                      Access tokens, refresh tokens, imported client
+                      configuration, and resumable upload session URLs are
+                      stored in your system’s Secret Service keyring. Temporary
+                      authorization codes and PKCE verifiers are held in memory.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Upload activity</td>
+                    <td>
+                      Filenames, account associations, file IDs, Google links,
+                      size, checksum, progress, timestamps, and error states are
+                      stored locally for recovery and recent activity.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Preferences</td>
+                    <td>
+                      Account choices, history settings, and backups of file
+                      associations are kept locally to apply your preferences
+                      and restore previous handlers.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                The plugin does not collect your Google password. There is no
+                plaintext fallback for storing tokens if the keyring is
+                unavailable. The release includes the public Desktop
+                application's client ID and client secret for Google sign-in.
+                These shared application fields are separate from your private
+                account tokens, which are never bundled or published.
+              </p>
+            </section>
+            <section id="google-access" aria-labelledby="google-access-title">
+              <h2 id="google-access-title">
+                <span class="index">03</span>Google access and use
+              </h2>
+              <p>
+                omadocs requests
+                <code>https://www.googleapis.com/auth/drive.file</code>,
+                Google’s per-file Drive permission. The permission can cover
+                files created by or explicitly shared with an application. The
+                current plugin uses it to create new uploads, check its own
+                upload file IDs, and obtain the account identity needed to
+                verify ownership. It does not enumerate your Drive.
+              </p>
+              <p>
+                Selected files are sent to Google only to provide the upload
+                functionality you request. The project does not use Google user
+                data for advertising, sell it, or use it to develop or train
+                generalized AI or machine-learning models. There is no automatic
+                transfer of your Google user data to the maintainer.
+              </p>
+              <p>
+                omadocs’s use and transfer of information received from Google
+                APIs adheres to the
+                <a
+                  href="https://developers.google.com/terms/api-services-user-data-policy"
+                  >Google API Services User Data Policy</a
+                >, including its Limited Use requirements. Google processes
+                uploaded files and sign-in information under
+                <a href="https://policies.google.com/privacy"
+                  >Google’s Privacy Policy</a
+                >.
+              </p>
+            </section>
+            <section id="retention" aria-labelledby="retention-title">
+              <h2 id="retention-title">
+                <span class="index">04</span>Storage and retention
+              </h2>
+              <p>
+                Your original file remains on your computer. Upload snapshots
+                and recent activity are kept in private omadocs directories
+                under your system’s XDG cache and state locations. Your keyring
+                holds persistent authorization material.
+              </p>
+              <p>
+                By default, completed activity is limited to the most recent
+                <strong>100 entries</strong> and a
+                <strong>30-day</strong> retention window. Pending snapshots
+                expire after <strong>7 days</strong> by default. These settings
+                are adjustable. Cleanup runs while the helper is active or when
+                it starts again, so data can remain on disk while the
+                application is not running.
+              </p>
+              <p>
+                Snapshots for finished operations are removed during cleanup.
+                Failed or uncertain operations can retain recovery records until
+                resolved or the app’s local data is cleared. Cleanup can also be
+                delayed if the keyring is locked. Connected-account credentials
+                remain until you remove the account or complete the app’s
+                uninstall flow.
+              </p>
+              <p>
+                Files already uploaded remain in Google Drive until you manage
+                or delete them there. Removing omadocs does not delete those
+                copies.
+              </p>
+            </section>
+            <section id="choices" aria-labelledby="choices-title">
+              <h2 id="choices-title">
+                <span class="index">05</span>Your controls
+              </h2>
+              <ul>
+                <li>
+                  <strong>Choose what to send.</strong> Upload only files you
+                  select, to the connected account you choose.
+                </li>
+                <li>
+                  <strong>Disconnect an account.</strong> Removing an account
+                  clears its locally stored authorization tokens and cancels
+                  pending work. It does not erase all past activity or delete
+                  Drive files.
+                </li>
+                <li>
+                  <strong>Revoke Google access.</strong> Visit your
+                  <a href="https://myaccount.google.com/connections"
+                    >Google Account’s third-party connections</a
+                  >
+                  to revoke the authorization grant. Removing a local account
+                  alone does not necessarily revoke that grant.
+                </li>
+                <li>
+                  <strong>Clear local app data.</strong> Follow the
+                  <a
+                    href="https://github.com/pablousx/omadocs/blob/main/docs/uninstall.md"
+                    >uninstall instructions</a
+                  >
+                  to clear omadocs account/activity data, snapshots, and
+                  app-tagged keyring items. Resolve any reported cleanup errors
+                  before removing the plugin source.
+                </li>
+                <li>
+                  <strong>Manage your originals.</strong> Original documents and
+                  any OAuth JSON you imported remain under your control; the
+                  plugin does not delete them.
+                </li>
+              </ul>
+            </section>
+            <section id="website" aria-labelledby="website-title">
+              <h2 id="website-title">
+                <span class="index">06</span>This website
+              </h2>
+              <p>
+                This is a static website designed for GitHub Pages. It has no
+                upload form, sign-in system, advertising, analytics scripts, or
+                third-party font requests. It does not access the accounts or
+                files connected to your desktop plugin.
+              </p>
+              <p>
+                If you change the color theme, the site stores one preference,
+                <code>omadocs-theme</code>, in your browser’s local storage. It
+                is not sent to the maintainer and remains until you clear site
+                data. The site works without that storage. No application
+                cookies are set by this site.
+              </p>
+              <p>
+                GitHub, as the website host, may process connection and request
+                information, including your IP address, for hosting and
+                security. Its processing is described in the
+                <a
+                  href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+                  >GitHub Privacy Statement</a
+                >. Following an external link takes you to a service with its
+                own privacy practices.
+              </p>
+            </section>
+            <section id="support" aria-labelledby="support-title">
+              <h2 id="support-title">
+                <span class="index">07</span>Support and contact
+              </h2>
+              <p>
+                You can contact the maintainer through
+                <a href="https://github.com/pablousx/omadocs/issues"
+                  >the project’s GitHub Issues page</a
+                >. If you choose to post an issue, the maintainer and other
+                visitors can read what you share, and GitHub stores it under its
+                own policies.
+              </p>
+              <p>
+                <strong>Issues are public.</strong> Do not post documents,
+                credentials, tokens, private file paths, or account details.
+                Start a privacy inquiry without personal data and request a
+                private contact method if needed. The plugin’s diagnostic export
+                is designed to omit document names, emails, paths, tokens, and
+                file IDs; review any information before sharing it.
+              </p>
+              <p>
+                For data held only on your device, the maintainer cannot
+                retrieve or erase it remotely. Use the local controls described
+                above. Contact Google or GitHub for requests relating to data
+                they hold independently.
+              </p>
+            </section>
+            <section id="changes" aria-labelledby="changes-title">
+              <h2 id="changes-title">
+                <span class="index">08</span>Policy changes
+              </h2>
+              <p>
+                This policy may change as the project evolves. Revisions will be
+                published on this page with an updated effective date, and
+                material changes to data handling will be described in project
+                release notes. The repository records the history of policy
+                changes.
+              </p>
+            </section>
+            <div class="legal-end">
+              <a href="index.html">← Back to omadocs</a
+              ><a href="terms.html">Terms of service →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <a class="brand" href="index.html"
+            ><svg viewBox="0 0 26 32" fill="none" aria-hidden="true">
+              <path
+                d="M3 2h13l7 7v21H3zM16 2v8h7M7 16h12M7 21h12M7 26h8"
+                stroke="currentColor"
+                stroke-width="1.7"
+              /></svg
+            ><span>omadocs<span class="accent">.</span></span></a
+          >
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="privacy.html" aria-current="page">Privacy policy</a>
+            <a href="terms.html">Terms of service</a>
+            <a href="https://github.com/pablousx/omadocs/issues"
+              >Contact <span aria-hidden="true">↗</span></a
+            >
+            <a href="https://github.com/pablousx/omadocs/blob/main/LICENSE"
+              >MIT license <span aria-hidden="true">↗</span></a
+            >
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >Made by <a href="https://github.com/pablousx">pablousx</a> for the
+            <a href="https://omarchy.org/">Omarchy</a> desktop.</span
+          ><span
+            >Independent project. Not affiliated with Google or Omarchy.</span
+          >
+        </div>
+        <div class="footer-wordmark" aria-hidden="true">omadocs.</div>
+      </div>
+    </footer>
+  </body>
+</html>

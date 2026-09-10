@@ -41,6 +41,47 @@ class MimeTest(EngineCase):
         self.mime.remove()
         self.assertEqual(self.mime.target().read_text(), self.original)
 
+    def test_runtime_update_refresh_preserves_defaults_and_restoration(self):
+        self.mime.install()
+        changed = set_entry(self.mime.target().read_text(), MIMES[0], "chosen-later.desktop;")
+        self.mime.target().write_text(changed)
+        self.mime.root = self.root / "new runtime"
+        self.mime.refresh_generated()
+        self.assertIn(str(self.mime.root / "omadocs-run"), (self.paths.bin / "omadocs").read_text())
+        self.assertEqual(self.mime.target().read_text(), changed)
+        self.mime.remove()
+        self.assertFalse((self.paths.bin / "omadocs").exists())
+        self.assertEqual(self.query(MIMES[0]), "chosen-later.desktop")
+        self.assertEqual(self.query(MIMES[1]), self.defaults[MIMES[1]])
+
+    def test_refresh_preserves_modified_and_absent_launchers(self):
+        self.mime.refresh_generated()
+        self.assertFalse((self.paths.bin / "omadocs").exists())
+        self.mime.install()
+        (self.paths.bin / "omadocs").write_text("edited launcher")
+        self.mime.root = self.root / "new runtime"
+        self.mime.refresh_generated()
+        self.assertEqual((self.paths.bin / "omadocs").read_text(), "edited launcher")
+
+    def test_launcher_follows_manifest_after_old_runtime_removed(self):
+        import json
+        import shutil
+        root = self.root / 'plugin space $dollar `literal` "quote" %'
+        old = root / "runtime" / "old"
+        new = root / "runtime" / "new"
+        old.mkdir(parents=True)
+        new.mkdir()
+        (root / ".omadocs-development-source").write_text("test checkout")
+        (root / "manifest.json").write_text(json.dumps({"id": DESKTOP_ID.removesuffix(".desktop"), "entryPoints": {"service": "runtime/new/Service.qml"}}))
+        (new / "omadocs-run").write_text("import json,sys\nprint(json.dumps(sys.argv[1:]))\n")
+        self.mime.root = old
+        self.mime.install()
+        shutil.rmtree(old)
+        source = str(self.root / 'Informe México $(literal) "quote".docx')
+        result = subprocess.run(['/usr/bin/python', '-I', str(self.paths.bin / 'omadocs'), 'open', '--', source], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), ['open', '--', source])
+
     def test_new_user_default_is_preserved(self):
         self.mime.install()
         changed = set_entry(self.mime.target().read_text(), MIMES[0], "chosen-later.desktop;")

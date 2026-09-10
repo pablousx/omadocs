@@ -7,12 +7,21 @@ All project sources live in this repository root. The Python package is `omadocs
 ```bash
 python -m unittest discover -s tests -v
 python scripts/check-qml.py
+python scripts/check-ui.py
 omarchy plugin validate .
 ```
 
 The suite uses fake OAuth/Drive/keyring/browser implementations, real loopback callbacks to those fake flows, real Unix sockets, isolated XDG desktop associations, and process-death tests. It needs local socket binding, which some agent sandboxes restrict. It does not contact Google or change the user's MIME defaults. The fake classes are in `tests/` and are never selected by a production command or endpoint environment variable.
 
 The QML checker creates a temporary `qs` import alias outside the repository because Quickshell supplies that virtual module mapping at runtime. It uses the installed Omarchy sources and fails on QML warnings as well as errors. No packaged files are modified, and there are no symlinks in the plugin tree.
+
+## UI interaction checks
+
+`python scripts/check-ui.py` runs 22 behavioral/rendering scenarios (QtTest reports 28 passes including fixture setup/cleanup). It uses the real bridge state, presentation logic, and view components with Qt Controls stand-ins for Quattro’s theme widgets. Quickshell embeds its QML plugins in its executable, so an ordinary offscreen QtTest runner cannot load the full native shell toolkit. These tests validate interaction behavior, not native theme appearance. They fail on QML warnings and use only fake accounts/files; no helper or Google requests are started.
+
+Native appearance, panel keyboard shortcuts, and the isolated `zenity` picker are checked separately in the running shell. `FilePicker.qml` invokes the private `_pick` launcher mode in its own process. Do not reintroduce QtQuick.Dialogs into the shell: native GTK3/GVFS dialog code aborted Quickshell during local testing. The picker’s process result is handled after stdout completion; cancellation returns to the panel and submits no upload.
+
+The chooser child uses `GIO_USE_VFS=local` and `GDK_DEBUG=no-portals` for local files. This avoids the portal cancellation hang reproduced on this machine; it does not change the desktop environment or other applications. See the official [GIO environment documentation](https://docs.gtk.org/gio/overview.html) and [GTK runtime options](https://docs.gtk.org/gtk4/running.html).
 
 ## Local shell validation
 
@@ -23,6 +32,8 @@ omarchy-shell shell hide io.github.pablousx.omadocs
 ```
 
 The installer only replaces a development copy marked as belonging to this checkout. Its installed manifest points to a versioned copy of the exact runtime sources. That avoids stale failed-component caching observed during Quattro 4.0.3 testing. Source remains in the repository; no second Quickshell instance is launched.
+
+Desktop launchers resolve the current runtime through the installed manifest, so a development update does not leave file associations pointing at a deleted version. On startup, the helper also refreshes unchanged, omadocs-owned launcher and desktop files to migrate older installations. It preserves MIME preferences, restoration backups, and manually edited launchers.
 
 The helper uses a single user runtime socket. A code fingerprint permits an idle helper to stop for replacement after an update; it refuses replacement while uploads or authorization are active. Python bytecode writes are disabled in the launcher so helper imports do not cause plugin file-watch reloads.
 

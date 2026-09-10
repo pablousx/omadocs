@@ -145,6 +145,16 @@ def main(argv=None):
             from .ipc import bridge, harden
             harden()
             return bridge()
+        if len(argv) == 2 and argv[0] == "_pick":
+            from .ipc import harden
+            from .picker import pick
+            harden()
+            try:
+                result = pick(argv[1])
+            except Fault as exc:
+                result = {"error": exc.public()}
+            print(json.dumps(result, ensure_ascii=True))
+            return 0
         args = parser().parse_args(argv)
         result = execute(args)
         print(json.dumps(result, ensure_ascii=True, indent=2, sort_keys=True))

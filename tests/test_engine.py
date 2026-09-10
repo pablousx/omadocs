@@ -187,9 +187,14 @@ class UploadTest(EngineCase):
 
     def test_disabled_default_does_not_fallback(self):
         self.engine.account_action("disable", self.account)
-        with self.assertRaises(Fault) as exc:
-            self.open(office(self.root / "file.docx"))
-        self.assertEqual(exc.exception.code, "account_disabled")
+        key = self.open(office(self.root / "file.docx"))
+        operation = self.journal.operation(key)
+        self.assertEqual(operation["state"], "paused")
+        self.assertEqual(operation["account"], self.account)
+        self.assertEqual(operation["error"], "account_disabled")
+        self.assertTrue(self.engine.snap(key).exists())
+        self.assertFalse(self.google.files)
+        self.assertEqual(self.engine.status()["attention"], 1)
 
     def test_expired_authentication_pauses(self):
         saved = self.keyring.get("account/" + self.account)

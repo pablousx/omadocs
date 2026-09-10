@@ -23,7 +23,7 @@ env = dict(os.environ, OMARCHY_SHELL_IPC_TIMEOUT="10s")
 if target.exists() and (not (target / marker).is_file() or (target / marker).read_text().strip() != str(root)):
     raise SystemExit("Refusing to replace an existing plugin that is not this development copy.")
 subprocess.run(["omarchy", "plugin", "validate", str(root)], check=True)
-sources = list(root.glob("*.qml")) + [root / "omadocs-run"]
+sources = list(root.glob("*.qml")) + list(root.glob("*.js")) + [root / "omadocs-run"]
 for name in ("omadocs", "assets"):
     sources.extend(p for p in (root / name).rglob("*") if p.is_file() and "__pycache__" not in p.parts)
 digest = hashlib.sha256()

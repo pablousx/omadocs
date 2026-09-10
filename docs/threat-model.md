@@ -35,3 +35,7 @@ Quattro plugins share an unsandboxed QML scene and run with the user's permissio
 ## Security testing
 
 Fake backends inject secrets into exception text, fail at upload boundaries, forge URLs/metadata, expire authentication, and simulate interrupted writes. Tests inspect serialized QML/RPC state, SQLite/WAL bytes, support archives, subprocess call sites, and helper output. Real-process tests terminate workers at durable boundaries and restart against the same journal and fake remote service. No production endpoint override or plaintext test keyring is exposed by the shipped CLI.
+
+## Public Desktop application configuration
+
+The release intentionally includes the maintainer-approved Desktop application client ID and client secret in `assets/oauth-client.json`. These distributed application fields cannot authenticate the official binary and are not user access credentials. Reuse can consume the shared project's API quota or affect the app's reputation. PKCE protects authorization-code exchange, not the public application's identity. The release never includes user tokens, authorization codes, or service-account keys. See the [OAuth ADR](oauth-adr.md) for validation, billing considerations, and custom-client behavior.

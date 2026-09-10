@@ -302,6 +302,12 @@ def serve(paths=None, *, components=None):
         journal = Journal(paths.state / "journal.sqlite3")
         engine = Engine(paths, journal, Keyring())
         mime = Mime(paths, journal)
+        try:
+            mime.refresh_generated()
+        except (Fault, OSError):
+            # A desktop repair failure must not prevent accounts/activity from
+            # loading. Keep backups so explicit MIME setup can retry later.
+            journal.event("mime")
     else:
         # Python dependency injection for integration tests. No production CLI,
         # QML request, or environment variable can select an alternate backend.

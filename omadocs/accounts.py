@@ -9,6 +9,36 @@ from .errors import Fault
 from .google import CLIENT_RE, Drive, OAuth, read_desktop_credentials
 
 
+def bundled_client(path=None):
+    """Read only the public Desktop application fields shipped with a release."""
+    path = path or Path(__file__).resolve().parent.parent / "assets/oauth-client.json"
+    try:
+        with Path(path).open("rb") as stream:
+            raw = stream.read(8193)
+        if len(raw) > 8192:
+            raise ValueError
+        value = json.loads(raw)
+        if not isinstance(value, dict) or not set(value) <= {"client_id", "client_secret"}:
+            raise ValueError
+        if not isinstance(value.get("client_id"), str) or not CLIENT_RE.fullmatch(value["client_id"]):
+            raise ValueError
+        if "client_secret" in value:
+            secret = value["client_secret"]
+            if not isinstance(secret, str) or not 1 <= len(secret) <= 4096 or any(ord(c) < 33 or ord(c) > 126 for c in secret):
+                raise ValueError
+        return value
+    except (OSError, ValueError, TypeError):
+        raise Fault("credentials_required") from None
+
+
+def bundled_client_available():
+    try:
+        bundled_client()
+        return True
+    except Fault:
+        return False
+
+
 def label_text(value):
     if not isinstance(value, str) or not 1 <= len(value.strip()) <= 80 or any(ord(c) < 32 or ord(c) == 127 for c in value):
         raise Fault("invalid_input")
@@ -38,16 +68,8 @@ class Accounts:
         key = self.journal.get("active_client")
         if key:
             return key, self.client(key)
-        p = Path(__file__).resolve().parent.parent / "assets/oauth-client.json"
-        try:
-            value = json.loads(p.read_text())
-            client_id = value.get("client_id")
-        except (OSError, ValueError, AttributeError):
-            client_id = None
-        if not isinstance(client_id, str) or not CLIENT_RE.fullmatch(client_id):
-            raise Fault("credentials_required")
-        key = hashlib.sha256(client_id.encode()).hexdigest()[:32]
-        client = {"client_id": client_id}
+        client = bundled_client()
+        key = hashlib.sha256(client["client_id"].encode()).hexdigest()[:32]
         self.keyring.put("client/" + key, client)
         return key, client
 

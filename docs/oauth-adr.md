@@ -1,6 +1,6 @@
 # ADR 001: Desktop OAuth, minimal Drive scope, Secret Service
 
-Status: accepted for implementation; maintainer client provisioning and live validation pending.
+Status: accepted for version 0.1.0. The maintainer approved bundling both Desktop application fields; packaged-client refresh passed. Clean-user consent and full Office browser validation remain unverified.
 
 ## Decision
 
@@ -17,17 +17,13 @@ Account identity comes from `about.get(fields=user(...))`, which accepts `drive.
 1. Create a maintainer-owned Google Cloud project and enable Drive API.
 2. Configure an external OAuth consent screen, accurate branding, support contact, privacy policy, and terms as applicable. Request only `drive.file`.
 3. Create a Desktop OAuth client. Set the publishing status appropriately for production and complete the Google branding/verification requirements actually shown for that project. `drive.file` is documented as a recommended, non-sensitive scope; that does not excuse consent/branding requirements.
-4. Validate OAuth using the maintained Desktop client, including refresh and multiple accounts. Google lists `client_secret` as optional for the current installed-app token exchange; **verify this with the actual production client before shipping the public-client-only configuration**. Do not silently substitute another flow if that client fails.
-5. Bundle only the validated public client ID as `assets/oauth-client.json` with this shape:
+4. Validate the exact Desktop client. On September 9, 2026, live refresh using only the client ID failed with `invalid_request`; the otherwise identical request with the Desktop `client_secret` succeeded. The release therefore bundles both fields, with the maintainer's explicit approval.
+5. Ship `assets/oauth-client.json` containing only `client_id` and `client_secret`. The loader bounds the file and field sizes and rejects other keys. Do not bundle Google's downloaded credential document, user tokens, authorization codes, or service-account keys. Imported custom client configuration still takes precedence for new accounts; existing accounts retain their client association.
+6. Verify a clean release installation can add an account without a user-created Cloud project. Refresh with the exact packaged configuration passed, but a fresh user's browser consent has not been independently verified; do not represent it as tested.
 
-   ```json
-   {"client_id": "THE_MAINTAINER_DESKTOP_CLIENT_ID.apps.googleusercontent.com"}
-   ```
+Desktop clients are public clients. A distributed Desktop `client_secret` cannot prove that a caller is the official app and must not be treated as a confidential server credential. PKCE binds an authorization response to its initiating helper; it does not prevent another application from reusing the public client configuration. User access/refresh tokens remain private and are never included in the release. See [RFC 8252, section 8.5](https://www.rfc-editor.org/rfc/rfc8252#section-8.5).
 
-   The example above is illustrative, not a usable client ID. No placeholder file is shipped as if configured. The real value must match Google's Desktop client format. The helper stores its client association in Secret Service before account creation.
-6. Verify a clean release installation can add an account without a user-created Cloud project. Until this passes, the production flow remains a release gate.
-
-Desktop clients are public clients; a client ID is not an authentication secret. PKCE binds the authorization response to the initiating helper. Keeping user tokens out of QML and subprocesses is a separate, stronger requirement.
+All installations share the application project's API quota. Reuse can cause throttling and affect the application's reputation. Standard Drive API use is currently free; Google has announced paid usage above standard thresholds later in 2026, with notice. Keep the project dedicated to omadocs, monitor usage and policy changes, and review billing before opting into paid quota increases. Publication does not enable or change Cloud billing. The project's actual billing linkage has not been verified. See [Drive limits](https://developers.google.com/workspace/drive/api/guides/limits) and [Google's announced model](https://developers.google.com/workspace/tools-safety).
 
 Google documents [seven-day refresh-token expiry for external projects in Testing](https://developers.google.com/identity/protocols/oauth2#expiration) when scopes go beyond the basic identity exceptions. That applies to Drive development tests and must not be mistaken for a stable production configuration.
 

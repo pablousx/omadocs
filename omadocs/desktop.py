@@ -142,12 +142,36 @@ class Mime:
     def generated(self):
         launcher = self.paths.bin / "omadocs"
         wrapper = "#!/usr/bin/python\n" + MARKER + "\nimport runpy\nrunpy.run_path(" + repr(str(self.root / "omadocs-run")) + ", run_name='__main__')\n"
+        if self.root.parent.name == "runtime" and (self.root.parent.parent / ".omadocs-development-source").is_file():
+            # Development installs replace the versioned runtime directory.
+            # Resolve the current entry point at launch, not at MIME setup.
+            wrapper = ("#!/usr/bin/python\n" + MARKER + "\nimport json, runpy\nfrom pathlib import Path\n"
+                       "root = Path(" + repr(str(self.root.parent.parent)) + ")\n"
+                       "manifest = json.loads((root / 'manifest.json').read_text())\n"
+                       "entry = Path(manifest['entryPoints']['service'])\n"
+                       "if manifest.get('id') != " + repr(PLUGIN_ID) + " or entry.is_absolute() or '..' in entry.parts:\n"
+                       "    raise SystemExit('Invalid omadocs plugin entry point')\n"
+                       "runpy.run_path(str(root / entry.parent / 'omadocs-run'), run_name='__main__')\n")
         desktop = (MARKER + "\n[Desktop Entry]\nType=Application\nName=omadocs\n"
                    "Comment=Upload a new Office copy to Google Drive; no synchronization\n"
                    "Exec=/usr/bin/python -I " + desktop_quote(str(launcher)) + " open -- %U\n"
                    "Terminal=false\nNoDisplay=true\nStartupNotify=false\n"
                    "Icon=" + str(self.root / "assets/omadocs.svg") + "\nMimeType=" + ";".join(MIMES) + ";\nCategories=Office;\n")
         return [(launcher, wrapper, 0o755), (self.paths.data / "applications" / DESKTOP_ID, desktop, 0o644)]
+
+    def refresh_generated(self):
+        """Repair owned launchers after an update without changing defaults."""
+        with self.lock:
+            for path, text, mode in self.generated():
+                key = "generated:" + str(path)
+                previous = self.backup(key)
+                if previous is None or not path.exists() or path.is_symlink():
+                    continue
+                current = read_text(path)
+                if hashlib.sha256(current.encode()).hexdigest() != previous["hash"] or current == text:
+                    continue
+                atomic_write(path, text, mode)
+                self.save(key, {"path": str(path), "hash": hashlib.sha256(text.encode()).hexdigest()})
 
     def install(self):
         with self.lock:

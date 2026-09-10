@@ -2,12 +2,11 @@
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import os
-from pathlib import Path
 import threading
 import time
 import uuid
 from . import VERSION
-from .accounts import Accounts, label_text
+from .accounts import Accounts, label_text, bundled_client_available
 from .errors import Fault, MESSAGES
 from .files import parse_path, snapshot, open_regular
 from .google import backoff, open_browser, summon_panel, validate_url
@@ -98,12 +97,9 @@ class Engine:
         choose = choose or self.journal.get("choose_account") and account is None
         account = account or (None if choose else self.journal.get("default_account"))
         selected = self.journal.account(account) if account else None
-        if selected and not selected["enabled"]:
-            raise Fault("account_disabled")
         with self.admission_lock:
             selected = self.journal.account(account) if account else None
-            if selected and not selected["enabled"]:
-                raise Fault("account_disabled")
+            state = "waiting_account" if not account else "ready" if selected["enabled"] else "paused"
             if len(self.journal.rows("SELECT id FROM operations WHERE state NOT IN ('complete','cancelled','expired')")) + len(files) > 1000:
                 raise Fault("busy")
             for index, source in enumerate(files):
@@ -122,16 +118,16 @@ class Engine:
                                      (key, request_id, account, path.name, now, now, selected["email"] if selected else None))
                 try:
                     meta = snapshot(path, self.snap(key))
-                    self.journal.update(key, **meta, state="ready" if account else "waiting_account")
-                    results.append({"id": key, "state": "ready" if account else "waiting_account"})
-                    if account and self.autostart:
+                    self.journal.update(key, **meta, state=state, error="account_disabled" if state == "paused" else None)
+                    results.append({"id": key, "state": state})
+                    if state == "ready" and self.autostart:
                         self.schedule(key)
                 except Fault as exc:
                     self.journal.update(key, state="failed", error=exc.code)
                     self.journal.event(exc.code)
                     results.append({"id": key, "state": "failed", "error": exc.public()})
         self.notify()
-        if not account:
+        if not account or state == "paused":
             self.summon()
         return {"operations": results}
 
@@ -471,6 +467,7 @@ class Engine:
         operations = [{k: row[k] for k in PUBLIC_FIELDS} for row in rows]
         return {"version": VERSION, "accounts": accounts, "default_account": self.journal.get("default_account"),
                 "operations": operations, "authentication": dict(self.auth_state), "settings": self.settings(),
+                "setup": {"client_configured": bool(self.journal.get("active_client")) or bundled_client_available()},
                 "active": sum(row["state"] in ("preparing", "ready", "uploading") for row in rows),
                 "attention": sum(row["state"] in ("failed", "auth_required", "waiting_account", "paused", "unresolved") or row["browser"] in ("failed", "uncertain") for row in rows)}
 
@@ -484,7 +481,7 @@ class Engine:
                 "accounts": len(self.journal.rows("SELECT id FROM accounts")),
                 "states": {row["state"]: row["count"] for row in states},
                 "events": self.journal.rows("SELECT time,code FROM events ORDER BY id DESC LIMIT 100"),
-                "authentication": dict(self.auth_state), "production_client": (Path(__file__).resolve().parent.parent / "assets/oauth-client.json").is_file()}
+                "authentication": dict(self.auth_state), "production_client": bundled_client_available()}
 
     def shutdown(self):
         self.stopping = True

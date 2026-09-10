@@ -4,25 +4,31 @@ An Omarchy 4 “Quattro” plugin that uploads **a new copy** of a local DOCX, X
 
 **This is an upload handler, not a synchronization client.** Every open creates a separate Drive copy, even for a file you opened before. The local file is never overwritten. Browser edits stay in Drive and never return to your local file. Use **Reopen** in upload activity to visit an existing uploaded copy without uploading again.
 
-Plugin ID: `io.github.pablousx.omadocs` · License: MIT · Initial development version: `0.1.0`.
+Plugin ID: `io.github.pablousx.omadocs` · License: MIT · Version: `0.1.0`.
+
+The [product website](https://sites.steralynx.com/), [privacy policy](https://sites.steralynx.com/privacy.html), and [terms](https://sites.steralynx.com/terms.html) are maintained in [`site/`](site/). See [website preview and GitHub Pages publishing](docs/website.md).
+
+![omadocs preview](preview.png)
+
+*Illustrative preview with fictional files and accounts.*
 
 ## Current readiness
 
-The helper, Quattro UI, CLI, fake Google backends, recovery tests, and desktop integration are implemented. **Live Google authentication, Office editor behavior, and the maintainer production OAuth client remain release gates.** No real client ID or user tokens are bundled. See [validation results](docs/validation.md) for precisely what has been exercised.
+Version 0.1.0 includes the maintainer's Desktop OAuth client configuration, so users can connect a Google account without creating a Cloud project. The bundle contains the public application's client ID and Desktop `client_secret`; it contains no user credentials or tokens. Custom Google setup remains available for forks and advanced users.
 
-The normal release will include the maintainer's public Desktop OAuth client configuration: users will not need a Google Cloud project. Until that is provisioned, development builds explain the missing configuration and support advanced credential import. They do not pretend authentication is configured.
+Automated backend/UI checks, native desktop integration, and live token refresh with the packaged client passed. The maintainer reports successful account linking and DOCX opening. **A fresh user's consent flow with the packaged build and editor-versus-viewer behavior for all three Office formats have not been independently verified.** See [validation results](docs/validation.md) for the exact coverage and limitations.
 
 ## Install
 
-Requires Omarchy Quattro, Python 3.12+, `python-requests`, `python-secretstorage`, a working Secret Service (normally the login keyring), and `xdg-utils`. QML runs in the existing Omarchy shell; there is no second Quickshell process or privileged installation hook.
+Requires Omarchy Quattro, Python 3.12+, `python-requests`, `python-secretstorage`, a working Secret Service (normally the login keyring), and `xdg-utils`. The panel’s file picker also uses `zenity` (already available on this test machine). QML runs in the existing Omarchy shell; there is no second Quickshell process or privileged installation hook.
 
-When the repository has been published by its maintainer:
+Install from the public repository:
 
 ```bash
-omarchy plugin add <repository-url> --enable
+omarchy plugin add https://github.com/pablousx/omadocs.git --enable
 ```
 
-The root `manifest.json` supports Quattro's normal clone/validate/enable installation. This task does not publish the repository.
+The root `manifest.json` supports Quattro's normal clone/validate/enable installation.
 
 For this local checkout:
 
@@ -35,10 +41,23 @@ The development installer copies the runtime into your user-owned plugin directo
 If dependencies are missing, install them explicitly:
 
 ```bash
-omarchy pkg add python-requests python-secretstorage xdg-utils
+omarchy pkg add python-requests python-secretstorage xdg-utils zenity
 ```
 
-Open the bar's upload icon. Add an account, choose its default, then select **MIME handlers → Use omadocs**. This records your previous handlers and installs the desktop entry and `~/.local/bin/omadocs` launcher. Ensure `~/.local/bin` is on your terminal's PATH. Until MIME setup, use `./omadocs-run` from this repository.
+Open the bar’s document icon. Connect an account in **Accounts**. To change double-click behavior, select **Settings → File opening → Use omadocs by default**. This records your previous handlers and installs the desktop entry and `~/.local/bin/omadocs` launcher. Ensure `~/.local/bin` is on your terminal's PATH. Until MIME setup, use `./omadocs-run` from this repository.
+
+## Everyday use
+
+- **Upload a document:** choose **Uploads → Upload files…**, drop local Office files into Uploads, or use **Open with → omadocs** in your file manager. The picker accepts multiple DOCX/XLSX/PPTX files; one invocation supports up to 64 files.
+- **Follow progress:** Uploads shows the owner, progress, and plain-language status. Use **Needs attention** to find work that needs a choice, sign-in, or retry.
+- **Open an uploaded copy:** choose **Open in browser**. This reuses the existing Drive copy.
+- **Choose another account:** use **Accounts → Use by default**, or enable **Settings → Ask which account to use**. One choice applies to files opened together.
+- **Manage accounts:** choose **Manage** to rename, pause, reconnect, or remove an account. Removal and upload cancellation explain their effect before confirmation.
+- **Setup and support:** expand **Custom Google setup**, **Activity history**, or **Diagnostics** in Settings. Diagnostics can be copied without document names or account identity.
+
+Use Tab / Shift+Tab to move between controls, Enter or Space to activate, and Esc to dismiss an inline confirmation or close the panel. Ctrl+1/2/3 switches Uploads/Accounts/Settings; Left/Right moves between focused navigation tabs. The panel preserves rename drafts and focused upload rows through background updates. Buttons show pending actions and ignore repeated clicks until a reply arrives.
+
+The file picker runs outside Quickshell, so desktop toolkit failures cannot crash the shell through this feature. If `zenity` is missing, use the file-manager action or drag and drop; the picker reports how to enable it.
 
 ## Google accounts and browser behavior
 
@@ -132,5 +151,6 @@ Directories are private and secret-bearing helper core dumps are disabled. Token
 ```bash
 python -m unittest discover -s tests -v
 python scripts/check-qml.py
+python scripts/check-ui.py
 omarchy plugin validate .
 ```
