@@ -18,7 +18,7 @@ Item {
         function init() { failOnWarning(/.?/); controller = createTemporaryObject(controllerComponent, parent); views = [] }
         function cleanup() { for (var view of views) if (view) view.destroy(); wait(5) }
         function createView(component) {
-            var view = component.createObject(parent, {controller: controller, width: 520, height: 500})
+            var view = component.createObject(parent, {controller: controller, width: 408, height: 500})
             views.push(view)
             verify(view !== null)
             wait(80)
@@ -112,19 +112,19 @@ Item {
         }
         function test_render_views() {
             var view = createView(activityComponent)
-            compare(grabImage(view).width, 520)
+            compare(grabImage(view).width, 408)
             grabImage(view).save("/tmp/omadocs-ux-uploads.png")
             views.pop()
             view.destroy()
             wait(10)
             view = createView(accountsComponent)
-            compare(grabImage(view).width, 520)
+            compare(grabImage(view).width, 408)
             grabImage(view).save("/tmp/omadocs-ux-accounts.png")
             views.pop()
             view.destroy()
             wait(10)
             view = createView(settingsComponent)
-            compare(grabImage(view).width, 520)
+            compare(grabImage(view).width, 408)
             grabImage(view).save("/tmp/omadocs-ux-settings.png")
         }
     }

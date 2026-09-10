@@ -13,10 +13,18 @@ Item {
     signal setupRequested()
 
     // Reserve two text lines and the action height even while empty.
-    implicitHeight: Math.ceil(Math.max(metrics.height * 2, dismiss.implicitHeight, setup.implicitHeight))
+    implicitHeight: Math.ceil(Math.max(metrics.height * 2, dismiss.implicitHeight, setup.implicitHeight)) + Style.space(18)
+    Rectangle {
+        anchors.fill: parent
+        visible: root.message !== ""
+        radius: Style.space(6)
+        color: Qt.alpha(root.error ? Color.urgent : Color.accent, 0.07)
+        border.color: Qt.alpha(root.error ? Color.urgent : Color.accent, 0.16)
+    }
     FontMetrics { id: metrics; font: label.font }
     RowLayout {
         anchors.fill: parent
+        anchors.margins: Style.space(9)
         spacing: Style.space(6)
         UiText {
             id: label
@@ -43,12 +51,14 @@ Item {
         UiAction {
             id: setup
             text: "Custom Google setup"
+            link: true
             visible: root.setupAvailable
             onClicked: root.setupRequested()
         }
         UiAction {
             id: dismiss
             text: "Dismiss"
+            link: true
             visible: root.dismissible
             onClicked: root.dismissed()
         }

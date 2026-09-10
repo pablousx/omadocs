@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.pablousx.omadocs",
   "name": "omadocs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "pablousx",
   "license": "MIT",
   "description": "Upload a new Office file copy to Google Drive and open it in your browser. No synchronization.",

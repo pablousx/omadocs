@@ -3,7 +3,6 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC
 import qs.Commons
-import qs.Ui as UI
 import "UiLogic.js" as Logic
 
 ColumnLayout {
@@ -37,7 +36,7 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
-        UiText { Layout.fillWidth: true; text: root.bridge.snapshot.active ? root.bridge.snapshot.active + " in progress" : "Your uploads"; font.bold: true }
+        UiText { Layout.fillWidth: true; text: root.bridge.snapshot.active ? root.bridge.snapshot.active + " in progress" : "Your uploads"; font.pixelSize: Style.space(13) }
         UiAction {
             text: root.controller.selectingFiles ? "Choosing files…" : root.bridge.isBusy("open") ? "Preparing files…" : "Upload files…"
             primary: true
@@ -49,7 +48,7 @@ ColumnLayout {
     }
     Flow {
         Layout.fillWidth: true
-        spacing: Style.space(4)
+        spacing: Style.space(6)
         Repeater {
             model: [{key: "all", label: "All"}, {key: "attention", label: "Needs attention"}, {key: "complete", label: "Uploaded"}]
             UiAction {
@@ -68,7 +67,7 @@ ColumnLayout {
             width: Math.max(0, parent.width - Style.space(30))
             spacing: Style.space(12)
             visible: rows.count === 0
-            UiText { width: parent.width; text: root.controller.activityFilter === "attention" ? "Nothing needs your attention" : root.controller.activityFilter === "complete" ? "No uploaded copies yet" : "Your documents, ready in Google Drive"; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+            UiText { width: parent.width; text: root.controller.activityFilter === "attention" ? "Nothing needs your attention" : root.controller.activityFilter === "complete" ? "No uploaded copies yet" : "Your documents, ready in Google Drive"; font.pixelSize: Style.space(13); horizontalAlignment: Text.AlignHCenter }
             UiText {
                 width: parent.width
                 text: root.controller.activityFilter !== "all" ? "New activity will appear here."
@@ -107,11 +106,11 @@ ColumnLayout {
                 readonly property bool sourceError: ["local_file", "source_changed"].indexOf(record.error) >= 0 && record.state === "failed"
                 width: list.width - Style.space(12)
                 spacing: Style.space(6)
-                UI.PanelSeparator { width: parent.width; visible: job.index > 0 }
+                Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width; visible: job.index > 0 }
                 RowLayout {
                     width: parent.width
                     UiText { text: "\uf15c"; color: Color.accent; Layout.alignment: Qt.AlignTop }
-                    UiText { Layout.fillWidth: true; text: job.record.name; font.bold: true; maximumLineCount: 2; elide: Text.ElideMiddle }
+                    UiText { Layout.fillWidth: true; text: job.record.name; font.pixelSize: Style.space(13); maximumLineCount: 2; elide: Text.ElideMiddle }
                     UiText { text: Logic.relativeTime(job.record.created, root.now); secondary: true; Layout.alignment: Qt.AlignTop }
                 }
                 UiText {
@@ -157,10 +156,10 @@ ColumnLayout {
                 }
                 Flow {
                     width: parent.width
-                    spacing: Style.space(4)
+                    spacing: Style.space(6)
                     UiAction {
                         text: root.bridge.isBusy("activity.reopen", job.record.id) ? "Opening…" : "Open in browser"
-                        primary: true
+                        link: true
                         visible: job.record.state === "complete"
                         available: root.bridge.connected && ["pending", "launching"].indexOf(job.record.browser) < 0
                         busy: job.busy

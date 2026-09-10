@@ -39,7 +39,7 @@ UI.Panel {
     }
     function fitHeight() {
         var count = bridge.snapshot.operations.length
-        sessionHeight = tab === 0 ? (count === 0 ? 350 : count === 1 ? 330 : count === 2 ? 440 : 510) : tab === 1 ? 410 : 510
+        sessionHeight = tab === 0 ? (count <= 1 ? 470 : 620) : 590
     }
     function navigate(index) { tab = index }
     function googleSetup() { settingsSection = "google"; tab = 2 }
@@ -120,8 +120,8 @@ UI.Panel {
         bar: root.bar
         open: root.opened
         focusTarget: keys
-        contentWidth: fittedContentWidth(Style.space(570))
-        contentHeight: fittedContentHeight(Style.space(root.sessionHeight))
+        contentWidth: fittedContentWidth(Style.space(440))
+        contentHeight: fittedContentHeight(Style.space(root.sessionHeight), Style.space(650))
 
         UI.PanelKeyCatcher {
             id: keys
@@ -136,17 +136,27 @@ UI.Panel {
             }
             ColumnLayout {
                 anchors.fill: parent
-                spacing: Style.space(10)
+                spacing: Style.space(14)
                 RowLayout {
                     Layout.fillWidth: true
-                    UiText { text: "\uf15c"; font.pixelSize: root.themeFont.subtitle; color: Color.accent }
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: Style.space(2)
-                        UiText { text: "omadocs"; font.pixelSize: root.themeFont.subtitle; font.bold: true }
-                        UiText { Layout.fillWidth: true; text: root.bridge.connected ? root.destination : "Connecting…"; secondary: true; maximumLineCount: 1; elide: Text.ElideRight }
+                    spacing: Style.space(10)
+                    UiText { text: "\uf15c"; font.pixelSize: Style.space(21) }
+                    UiText { text: "omadocs"; font.pixelSize: Style.space(21); Layout.fillWidth: true }
+                    UiText { text: "OFFICE TO DRIVE"; font.pixelSize: Style.space(9); font.letterSpacing: 1; secondary: true }
+                }
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: statusContent.implicitHeight + Style.space(26)
+                    radius: Style.space(8)
+                    color: Qt.alpha(Color.accent, 0.07)
+                    border.color: Qt.alpha(Color.accent, 0.16)
+                    Column {
+                        id: statusContent
+                        anchors { top: parent.top; left: parent.left; right: parent.right; margins: Style.space(13) }
+                        spacing: Style.space(6)
+                        UiText { width: parent.width; text: root.bridge.connected ? "Your files, in Drive" : "Connecting…"; font.pixelSize: Style.space(16); color: Color.accent }
+                        UiText { width: parent.width; text: root.destination; secondary: true }
                     }
-                    UiAction { text: "Close"; tooltipText: "Close panel · Esc"; onClicked: root.close() }
                 }
                 RowLayout {
                     Layout.fillWidth: true

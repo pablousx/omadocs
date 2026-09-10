@@ -4,12 +4,12 @@ import QtTest
 import "../.." as App
 
 Item {
-    width: 570
+    width: 440
     height: 510
     Component {
         id: hostComponent
         ColumnLayout {
-            width: 550
+            width: 408
             height: 490
             property int tab: 0
             property alias footer: footer
