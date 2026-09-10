@@ -45,7 +45,7 @@ QQC.ScrollView {
             onClicked: root.bridge.request("settings.set", {key: "choose_account", value: !checked})
             onActiveFocusChanged: if (activeFocus) root.reveal(this)
         }
-        UI.PanelSeparator { width: parent.width }
+        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
         UiAction { text: (root.section === "files" ? "− " : "+ ") + "File opening" + (root.allInstalled ? " · Enabled" : ""); width: parent.width; leftAlign: true; onClicked: root.toggleSection("files") }
         Column {
             width: parent.width
@@ -59,7 +59,7 @@ QQC.ScrollView {
                     id: handler
                     required property var modelData
                     width: parent.width
-                    UiText { text: handler.modelData.extension.replace(".", "").toUpperCase(); font.bold: true }
+                    UiText { text: handler.modelData.extension.replace(".", "").toUpperCase(); font.pixelSize: Style.space(13) }
                     UiText { Layout.fillWidth: true; text: handler.modelData.installed ? "omadocs" : Logic.handlerName(handler.modelData.current); secondary: true; horizontalAlignment: Text.AlignRight; maximumLineCount: 1; elide: Text.ElideRight }
                 }
             }
@@ -72,20 +72,20 @@ QQC.ScrollView {
             }
             UiText { width: parent.width; text: "Restoring keeps any app choices you made after enabling omadocs."; secondary: true }
         }
-        UI.PanelSeparator { width: parent.width }
+        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
         UiAction { text: (root.section === "google" ? "− " : "+ ") + "Custom Google setup" + (root.controller.configured ? " · Ready" : ""); width: parent.width; leftAlign: true; onClicked: root.toggleSection("google") }
         Column {
             width: parent.width
             visible: root.section === "google"
             spacing: Style.space(9)
-            UiText { width: parent.width; text: root.controller.configured ? "Google sign-in is configured." : "One-time setup for this development build"; font.bold: true }
+            UiText { width: parent.width; text: root.controller.configured ? "Google sign-in is configured." : "One-time setup for this development build"; font.pixelSize: Style.space(13) }
             UiText {
                 width: parent.width
                 text: root.controller.configured ? "Accounts are ready to connect. Import another client below only for development or a fork; existing accounts keep their original client."
                     : "1. Enable Google Drive API in a Google Cloud project.\n2. Create a Desktop OAuth client and add your email as a test user.\n3. Download the JSON and import it below."
                 secondary: true
             }
-            UiAction { text: "Google’s setup instructions ↗"; onClicked: Qt.openUrlExternally("https://developers.google.com/workspace/drive/api/quickstart/python#authorize_credentials_for_a_desktop_application") }
+            UiAction { text: "Google’s setup instructions ↗"; link: true; onClicked: Qt.openUrlExternally("https://developers.google.com/workspace/drive/api/quickstart/python#authorize_credentials_for_a_desktop_application") }
             UiText { text: "Desktop OAuth JSON file"; secondary: true }
             UI.TextField {
                 id: credential
@@ -114,7 +114,7 @@ QQC.ScrollView {
             }
             UiText { width: parent.width; text: "Access is limited to files created or authorized for this app. Sign-in tokens stay in your login keyring."; secondary: true }
         }
-        UI.PanelSeparator { width: parent.width }
+        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
         UiAction { text: (root.section === "history" ? "− " : "+ ") + "Activity history"; width: parent.width; leftAlign: true; onClicked: root.toggleSection("history") }
         Column {
             width: parent.width
@@ -144,7 +144,7 @@ QQC.ScrollView {
             }
             UiText { width: parent.width; text: "Temporary copies are deleted after completion or cancellation. Open in browser is available while an uploaded item remains in activity."; secondary: true }
         }
-        UI.PanelSeparator { width: parent.width }
+        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
         UiAction { text: (root.section === "diagnostics" ? "− " : "+ ") + "Diagnostics"; width: parent.width; leftAlign: true; onClicked: root.toggleSection("diagnostics") }
         Column {
             width: parent.width

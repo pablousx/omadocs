@@ -4,7 +4,7 @@ An Omarchy 4 “Quattro” plugin that uploads **a new copy** of a local DOCX, X
 
 **This is an upload handler, not a synchronization client.** Every open creates a separate Drive copy, even for a file you opened before. The local file is never overwritten. Browser edits stay in Drive and never return to your local file. Use **Reopen** in upload activity to visit an existing uploaded copy without uploading again.
 
-Plugin ID: `io.github.pablousx.omadocs` · License: MIT · Version: `0.1.0`.
+Plugin ID: `io.github.pablousx.omadocs` · License: MIT · Version: `0.1.1`.
 
 The [product website](https://pablousx.github.io/omadocs/), [privacy policy](https://pablousx.github.io/omadocs/privacy.html), and [terms](https://pablousx.github.io/omadocs/terms.html) are maintained in [`site/`](site/). See [website preview and GitHub Pages publishing](docs/website.md).
 
@@ -14,7 +14,7 @@ The [product website](https://pablousx.github.io/omadocs/), [privacy policy](htt
 
 ## Current readiness
 
-Version 0.1.0 includes the maintainer's Desktop OAuth client configuration, so users can connect a Google account without creating a Cloud project. The bundle contains the public application's client ID and Desktop `client_secret`; it contains no user credentials or tokens. Custom Google setup remains available for forks and advanced users.
+Version 0.1.1 includes the maintainer's Desktop OAuth client configuration, so users can connect a Google account without creating a Cloud project. The bundle contains the public application's client ID and Desktop `client_secret`; it contains no user credentials or tokens. Custom Google setup remains available for forks and advanced users.
 
 Automated backend/UI checks, native desktop integration, and live token refresh with the packaged client passed. The maintainer reports successful account linking and DOCX opening. **A fresh user's consent flow with the packaged build and editor-versus-viewer behavior for all three Office formats have not been independently verified.** See [validation results](docs/validation.md) for the exact coverage and limitations.
 

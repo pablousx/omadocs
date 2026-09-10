@@ -23,7 +23,7 @@ ColumnLayout {
     ListModel { id: rows; dynamicRoles: true }
     RowLayout {
         Layout.fillWidth: true
-        UiText { text: "Google accounts"; font.bold: true; Layout.fillWidth: true }
+        UiText { text: "Google accounts"; font.pixelSize: Style.space(13); Layout.fillWidth: true }
         UiAction {
             text: root.bridge.snapshot.authentication.busy ? "Connecting…" : "Connect account"
             primary: true
@@ -46,7 +46,7 @@ ColumnLayout {
             width: parent.width - Style.space(20)
             spacing: Style.space(12)
             visible: rows.count === 0
-            UiText { width: parent.width; text: "Connect once. Open your Office files in Drive."; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+            UiText { width: parent.width; text: "Connect once. Open your Office files in Drive."; font.pixelSize: Style.space(13); horizontalAlignment: Text.AlignHCenter }
             UiText { width: parent.width; text: "Choose a Google account to own your uploaded copies. Sign-in opens in your default browser."; secondary: true; horizontalAlignment: Text.AlignHCenter }
             UiText { width: parent.width; visible: !root.controller.configured; text: "This development build needs app credentials first. Custom Google setup walks you through it."; secondary: true; horizontalAlignment: Text.AlignHCenter }
             UiAction { anchors.horizontalCenter: parent.horizontalCenter; text: root.controller.configured ? "Connect Google account" : "Set up Google sign-in"; primary: true; available: root.bridge.connected; busy: root.bridge.snapshot.authentication.busy; onClicked: root.controller.addAccount() }
@@ -71,10 +71,10 @@ ColumnLayout {
                 readonly property bool busy: root.bridge.isBusy("accounts.remove", record.id) || root.bridge.isBusy("accounts.rename", record.id) || root.bridge.isBusy("accounts.enable", record.id) || root.bridge.isBusy("accounts.disable", record.id) || root.bridge.isBusy("accounts.set-default", record.id)
                 width: list.width - Style.space(12)
                 spacing: Style.space(7)
-                UI.PanelSeparator { width: parent.width; visible: account.index > 0 }
+                Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width; visible: account.index > 0 }
                 RowLayout {
                     width: parent.width
-                    UiText { Layout.fillWidth: true; text: account.record.label; font.bold: true; maximumLineCount: 2; elide: Text.ElideRight }
+                    UiText { Layout.fillWidth: true; text: account.record.label; font.pixelSize: Style.space(13); maximumLineCount: 2; elide: Text.ElideRight }
                     UiText { text: "Default"; visible: account.isDefault; color: Color.accent; secondary: true }
                 }
                 UiText { width: parent.width; text: account.record.email; secondary: true; visible: account.record.label !== account.record.email }
@@ -86,7 +86,7 @@ ColumnLayout {
                 }
                 Flow {
                     width: parent.width
-                    spacing: Style.space(4)
+                    spacing: Style.space(6)
                     UiAction { text: "Use by default"; visible: !account.isDefault && !!account.record.enabled; available: root.bridge.connected; busy: account.busy; onClicked: root.bridge.request("accounts.set-default", {id: account.record.id}) }
                     UiAction { text: "Enable account"; primary: true; visible: !account.record.enabled; available: root.bridge.connected; busy: account.busy; onClicked: root.bridge.request("accounts.enable", {id: account.record.id}) }
                     UiAction { text: "Sign in again"; primary: true; visible: account.record.auth !== "ready" && account.record.auth !== "keyring"; available: root.bridge.connected; busy: account.busy || root.bridge.snapshot.authentication.busy; onClicked: root.bridge.request("accounts.reauthenticate", {id: account.record.id}) }
@@ -105,7 +105,7 @@ ColumnLayout {
                     spacing: Style.space(8)
                     Flow {
                         width: parent.width
-                        spacing: Style.space(4)
+                        spacing: Style.space(6)
                         UiAction {
                             text: "Rename"
                             available: !account.busy

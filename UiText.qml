@@ -6,9 +6,9 @@ Text {
     property bool secondary: false
     textFormat: Text.PlainText
     color: Color.foreground
-    opacity: secondary ? 0.75 : 1
+    opacity: secondary ? 0.70 : 1
     font.family: themeFont.family
-    font.pixelSize: secondary ? themeFont.caption : themeFont.body
+    font.pixelSize: Style.space(secondary ? 11 : 12)
     wrapMode: Text.Wrap
     Accessible.role: Accessible.StaticText
     Accessible.name: text

@@ -87,3 +87,16 @@ The maintainer authorized publication after reviewing Desktop client reuse and b
 The built-in path is covered by the automated bundle/default/refresh tests. A fresh user's Google consent with the packaged release, live XLSX/PPTX browser behavior, and installation in a separate clean Quattro profile remain unverified. Version 0.1.0 is an initial release with those documented limitations, not a claim of complete production certification.
 
 Final pre-publication checks passed: **94 Python tests** (5.840 seconds), **22 UI scenarios / 28 QtTest passes**, QML validation without warnings, root manifest validation, static site checks, release artifact/credential checks, and `git diff --check`. No tests were skipped.
+
+
+## Version 0.1.1 UI release validation — September 10, 2026
+
+This release updates the native panel width, typography, monochrome header icon, buttons, links, list separators, and tinted notification footer. The Close button is removed; Escape and outside-click dismissal remain the panel's dismissal controls. Upload/account/credential/MIME contracts are unchanged.
+
+- **94 Python tests passed**, with no skipped tests, including desktop entry validation, isolated MIME round trips, and the external picker tests. The system PyGObject emitted a deprecation warning in a desktop test; the test passed.
+- **28 QtTest passes** (including fixture setup/cleanup), with view rendering and notification layout checked at a 408-pixel content width for the 440-pixel panel.
+- QML validation passed without warnings, along with plugin validation, static site validation, repository configuration checks, and release artifact/credential checks.
+- Refreshed [native captures](screenshots/README.md) use fictional accounts and documents, including upload progress, browser failure, the account list, Settings, and a dismissible error. All four Settings sections were opened for visual review. The theme-scaled panel measured 513 pixels wide in this desktop session.
+- Native Ctrl+2 navigation, Escape dismissal, and external picker Escape cancellation/reopening passed in the existing shell with a temporary fake bridge. An initial attempt encountered a preview focus/IPC interruption during shell reload; the checks passed after the shell settled. The temporary preview was removed afterward.
+- This pass did not independently exercise every theme/monitor orientation, long-name combination, or native picker selection. No real Google upload, new consent/reauthentication, or real-user MIME-default mutation was performed. Existing 0.1.0 limitations remain: fresh-user Google consent, live XLSX/PPTX browser landing behavior, and installation in a separate clean Quattro user profile are unverified.
+- The website's source version is updated to 0.1.1; Pages deployment is separate and is not part of this plugin release.
