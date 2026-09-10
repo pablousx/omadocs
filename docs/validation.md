@@ -69,7 +69,7 @@ The UI suite passed 22 scenarios (28 QtTest passes including fixture setup/clean
 
 ## Release preparation — September 9, 2026
 
-The maintainer reports that the Google Cloud project has been published to production. The repository `pablousx/omadocs` is publicly readable, the display name is lowercase `omadocs`, and its permanent plugin ID remains unchanged.
+The maintainer reports that the Google Cloud project has been published to production. The repository `pablousx/omadocs` is publicly readable, and its permanent plugin ID remains unchanged.
 
 - **94 Python tests passed**, including five new bundled-client parsing, default-selection, custom-client precedence, refresh, and readiness checks. The **22 UI scenarios** (28 QtTest passes), QML validation, site checks, and root manifest validation passed.
 - Live token refresh with the already connected account returned HTTP 400 `invalid_request` when only the client ID was supplied. The otherwise identical request using the existing Desktop client's `client_secret` succeeded. No credential values were printed, no account data was overwritten, and this check did not upload files or validate a new user's consent flow.

@@ -21,7 +21,7 @@ manifest = json.loads((root/'manifest.json').read_text())
 project = tomllib.loads((root/'pyproject.toml').read_text())['project']
 errors = []
 if manifest['id'] != PLUGIN_ID or manifest['name'] != 'omadocs' or manifest['barWidget']['displayName'] != 'omadocs':
-    errors.append('The permanent ID and lowercase display name must match.')
+    errors.append('The permanent ID and display name must match the release configuration.')
 if manifest['version'] != VERSION or project['version'] != VERSION:
     errors.append('Release versions disagree.')
 for name in ('LICENSE', 'README.md', 'docs/uninstall.md', 'site/index.html', 'site/privacy.html', 'site/terms.html'):
@@ -59,4 +59,4 @@ for raw in tracked:
         errors.append('Credential-like content needs review: '+name)
 if errors:
     raise SystemExit('\n'.join(errors))
-print('Release checks passed: lowercase name, matching versions, Desktop client schema, publication files, and artifact/credential checks.')
+print('Release checks passed: plugin identity, matching versions, Desktop client schema, publication files, and artifact/credential checks.')
