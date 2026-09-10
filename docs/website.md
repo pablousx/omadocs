@@ -17,11 +17,15 @@ Open `http://127.0.0.1:8765/`. Pages are `index.html`, `privacy.html`, and `term
 
 The included `.github/workflows/pages.yml` uploads **only `site/`**, never the plugin source, local state, or Google configuration. It uses GitHub’s official static Pages actions. It is manual: pushing a commit does not deploy it.
 
-1. Review and commit the site, `scripts/check-site.py`, and the workflow to the repository’s default branch.
-2. In the repository, open **Settings → Pages → Build and deployment → Source**, and select **GitHub Actions**.
-3. In **Actions → Publish website to GitHub Pages**, select **Run workflow** on `main`.
-4. Follow the deployment URL. The repository has the maintainer-configured custom domain `https://sites.steralynx.com/`; preserve the root `CNAME` and Pages domain settings. Without a custom domain, the default address would be `https://pablousx.github.io/omadocs/`.
-5. Verify all three pages on the published URL, both color themes, the install command, and mobile layout.
+1. Keep the custom domain `sites.steralynx.com` on the user-site repository `pablousx/pablousx.github.io`, which publishes `docs/` from `main`. Its homepage lists projects without redirecting visitors.
+2. In this `omadocs` repository, open **Settings → Pages → Build and deployment → Source**, and select **GitHub Actions**. Leave **Custom domain empty** and do not add a `CNAME` file here.
+3. In **Actions → Publish website to GitHub Pages**, select **Run workflow** on `main`. Upload `site/` at the artifact root. GitHub adds `/omadocs/` automatically because this is a project site inheriting the user site's custom domain; do not wrap the artifact in another `omadocs/` folder.
+4. Open `https://sites.steralynx.com/omadocs/`, `https://sites.steralynx.com/omadocs/privacy.html`, and `https://sites.steralynx.com/omadocs/terms.html`.
+5. Verify all three pages, both color themes, the install command, and mobile layout.
+
+Cloudflare needs the explicit DNS-only record `CNAME sites → pablousx.github.io`. It overrides the wildcard tunnel DNS record for this hostname. Other subdomains keep their existing routing. Once GitHub's domain certificate is ready, enable **Enforce HTTPS** on the user site.
+
+Other project repositories, such as `omaplugin`, can enable Pages without their own custom domain and inherit `/omaplugin/` with independent deployments. See [GitHub's custom-domain inheritance](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-a-custom-domain-across-multiple-repositories).
 
 Repeat the manual workflow for updates. GitHub repository and environment rules may require an approval before deployment. Nothing in the local development workflow publishes the site.
 
@@ -39,7 +43,7 @@ Reference: [Creating a GitHub Pages site](https://docs.github.com/en/pages/getti
 
 ## Google consent-screen use
 
-Once published, the URLs are suitable as the site’s homepage, privacy-policy page, and terms page. Use the real deployed URLs in Google Cloud. Pages deployment by itself does not complete Google’s OAuth production/branding verification: verify control of the domain used for the consent screen and follow the requirements shown for the production project.
+Use `https://sites.steralynx.com/omadocs/` as the Google consent homepage, `/omadocs/privacy.html` for privacy, and `/omadocs/terms.html` for terms. Update any older URLs that pointed at the domain root. Pages deployment by itself does not complete Google’s OAuth production/branding verification: verify control of the domain used for the consent screen and follow the requirements shown for the production project.
 
 These pages describe the existing plugin. They do not bundle credentials or change its OAuth configuration. See [the OAuth ADR](oauth-adr.md) and [release checklist](release-checklist.md) for that separate work.
 

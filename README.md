@@ -6,7 +6,7 @@ An Omarchy 4 “Quattro” plugin that uploads **a new copy** of a local DOCX, X
 
 Plugin ID: `io.github.pablousx.omadocs` · License: MIT · Version: `0.1.0`.
 
-The [product website](https://sites.steralynx.com/), [privacy policy](https://sites.steralynx.com/privacy.html), and [terms](https://sites.steralynx.com/terms.html) are maintained in [`site/`](site/). See [website preview and GitHub Pages publishing](docs/website.md).
+The [product website](https://sites.steralynx.com/omadocs/), [privacy policy](https://sites.steralynx.com/omadocs/privacy.html), and [terms](https://sites.steralynx.com/omadocs/terms.html) are maintained in [`site/`](site/). See [website preview and GitHub Pages publishing](docs/website.md).
 
 ![omadocs preview](preview.png)
 

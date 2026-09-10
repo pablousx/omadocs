@@ -26,6 +26,7 @@ jobs:
         run: python3 scripts/check-site.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      # The user site owns sites.steralynx.com; Pages mounts this artifact at /omadocs/.
       - name: Upload website only
         uses: actions/upload-pages-artifact@v3
         with:
