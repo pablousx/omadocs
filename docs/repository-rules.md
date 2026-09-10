@@ -3,7 +3,7 @@
 Two GitHub branch rulesets protect the default branch:
 
 - [Open source baseline](../.github/rulesets/open-source.json) requires pull requests, resolved review conversations, and squash merging, and blocks deletion and force pushes. Required approvals remain at zero while the project has one maintainer.
-- [omadocs CI](../.github/rulesets/ci.json) requires the GitHub Actions checks `Python tests` and `Website validation`, with the branch up to date before merging.
+- [omadocs CI](../.github/rulesets/ci.json) requires the GitHub Actions checks `Repository checks`, `Python tests`, and `Website validation`, with the branch up to date before merging.
 
 Both grant `pablousx` (GitHub user ID `66285146`) an **Always allow** bypass, including direct pushes and bypassing failed checks. Normal changes should still use pull requests and passing CI.
 
@@ -22,3 +22,5 @@ The template targets the default branch, regardless of its name. It grants bypas
 Keep required checks specific to each repository. Import `ci.json` only after that repository has successfully run checks with the exact names and GitHub Actions source specified in the file. The integration ID `15368` identifies GitHub Actions on github.com.
 
 Centrally managed rulesets across multiple repositories require an organization on GitHub Team or Enterprise. See GitHub's [organization ruleset documentation](https://docs.github.com/en/organizations/managing-organization-settings/creating-rulesets-for-repositories-in-your-organization) and [repository ruleset API](https://docs.github.com/en/rest/repos/rules).
+
+The shared community files, labels, security settings, and setup script are described in [GitHub repository configuration](../GITHUB_SETUP.md).

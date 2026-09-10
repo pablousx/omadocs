@@ -14,3 +14,10 @@ client_secret*.json
 *.sqlite*
 *.log
 *.tar.gz
+
+# Common local files
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example

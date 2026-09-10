@@ -3,10 +3,19 @@
   "target": "branch",
   "enforcement": "active",
   "bypass_actors": [
-    { "actor_id": 66285146, "actor_type": "User", "bypass_mode": "always" }
+    {
+      "actor_id": 66285146,
+      "actor_type": "User",
+      "bypass_mode": "always"
+    }
   ],
   "conditions": {
-    "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] }
+    "ref_name": {
+      "include": [
+        "~DEFAULT_BRANCH"
+      ],
+      "exclude": []
+    }
   },
   "rules": [
     {
@@ -14,8 +23,18 @@
       "parameters": {
         "strict_required_status_checks_policy": true,
         "required_status_checks": [
-          { "context": "Python tests", "integration_id": 15368 },
-          { "context": "Website validation", "integration_id": 15368 }
+          {
+            "context": "Repository checks",
+            "integration_id": 15368
+          },
+          {
+            "context": "Python tests",
+            "integration_id": 15368
+          },
+          {
+            "context": "Website validation",
+            "integration_id": 15368
+          }
         ]
       }
     }
