@@ -45,8 +45,8 @@ QQC.ScrollView {
             onClicked: root.bridge.request("settings.set", {key: "choose_account", value: !checked})
             onActiveFocusChanged: if (activeFocus) root.reveal(this)
         }
-        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
-        UiAction { text: (root.section === "files" ? "− " : "+ ") + "File opening" + (root.allInstalled ? " · Enabled" : ""); width: parent.width; leftAlign: true; onClicked: root.toggleSection("files") }
+        UI.PanelSeparator { width: parent.width; foreground: Color.foreground }
+        UiAction { text: (root.section === "files" ? "− " : "+ ") + "FILE OPENING" + (root.allInstalled ? " · ENABLED" : ""); width: parent.width; leftAlign: true; onClicked: root.toggleSection("files") }
         Column {
             width: parent.width
             visible: root.section === "files"
@@ -72,8 +72,8 @@ QQC.ScrollView {
             }
             UiText { width: parent.width; text: "Restoring keeps any app choices you made after enabling omadocs."; secondary: true }
         }
-        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
-        UiAction { text: (root.section === "google" ? "− " : "+ ") + "Custom Google setup" + (root.controller.configured ? " · Ready" : ""); width: parent.width; leftAlign: true; onClicked: root.toggleSection("google") }
+        UI.PanelSeparator { width: parent.width; foreground: Color.foreground }
+        UiAction { text: (root.section === "google" ? "− " : "+ ") + "CUSTOM GOOGLE SETUP" + (root.controller.configured ? " · READY" : ""); width: parent.width; leftAlign: true; onClicked: root.toggleSection("google") }
         Column {
             width: parent.width
             visible: root.section === "google"
@@ -114,8 +114,8 @@ QQC.ScrollView {
             }
             UiText { width: parent.width; text: "Access is limited to files created or authorized for this app. Sign-in tokens stay in your login keyring."; secondary: true }
         }
-        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
-        UiAction { text: (root.section === "history" ? "− " : "+ ") + "Activity history"; width: parent.width; leftAlign: true; onClicked: root.toggleSection("history") }
+        UI.PanelSeparator { width: parent.width; foreground: Color.foreground }
+        UiAction { text: (root.section === "history" ? "− " : "+ ") + "ACTIVITY HISTORY"; width: parent.width; leftAlign: true; onClicked: root.toggleSection("history") }
         Column {
             width: parent.width
             visible: root.section === "history"
@@ -144,8 +144,8 @@ QQC.ScrollView {
             }
             UiText { width: parent.width; text: "Temporary copies are deleted after completion or cancellation. Open in browser is available while an uploaded item remains in activity."; secondary: true }
         }
-        Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width }
-        UiAction { text: (root.section === "diagnostics" ? "− " : "+ ") + "Diagnostics"; width: parent.width; leftAlign: true; onClicked: root.toggleSection("diagnostics") }
+        UI.PanelSeparator { width: parent.width; foreground: Color.foreground }
+        UiAction { text: (root.section === "diagnostics" ? "− " : "+ ") + "DIAGNOSTICS"; width: parent.width; leftAlign: true; onClicked: root.toggleSection("diagnostics") }
         Column {
             width: parent.width
             visible: root.section === "diagnostics"

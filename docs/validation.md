@@ -40,6 +40,16 @@ Remaining release gates are maintainer-owned Desktop client provisioning, produc
 
 See the release and screenshot checklists for broader release certification. Nothing was published.
 
+## Follow-up: stock-style panel simplification
+
+Date: 2026-09-22. The panel was simplified against the installed Omarchy 4.0.4 network and Bluetooth panels: its content width is now 380 theme pixels, the decorative status card is replaced by the standard icon/title/status hero and `PanelSeparator`, section labels use the stock uppercase hierarchy, and actions use denser monochrome rectangular controls. Upload, account, Settings, notification, keyboard, and accessibility behavior is unchanged.
+
+- The three views passed the existing UI interaction/render suite (**28 QtTest passes**) and QML validation completed without warnings.
+- Uploads, Accounts, and Settings were inspected in the running shell against the isolated fake-account fixture. The review covered progress, authentication recovery, account choice, paused accounts, tab selection, toggle layout, collapsed Settings sections, separators, and vertical scrolling. No horizontal clipping or overlap was observed at the new width.
+- Temporary full-desktop captures were kept outside the repository; only fictional fixture data was used. The fixture was shut down before returning to the normal helper.
+
+During repeated shell reloads, Quickshell once crashed in Qt/QML delegate-model destruction after reporting an IPC-requested exit. System crash history showed the same shutdown signature before this change, and the core contained no omadocs frame or source reference. The shell restarted and reconnected to the installed plugin. This is recorded as an environmental shutdown limitation, not hidden or treated as evidence of a plugin-specific regression.
+
 ## Follow-up: desktop launch after development update
 
 The user subsequently reported successful credential import and Google account linking, followed by a DOCX open that produced no activity. Inspection reproduced a local `FileNotFoundError`: the desktop launcher referred to the runtime directory removed by the icon update. No upload operation had reached the helper.
@@ -100,3 +110,14 @@ This release updates the native panel width, typography, monochrome header icon,
 - Native Ctrl+2 navigation, Escape dismissal, and external picker Escape cancellation/reopening passed in the existing shell with a temporary fake bridge. An initial attempt encountered a preview focus/IPC interruption during shell reload; the checks passed after the shell settled. The temporary preview was removed afterward.
 - This pass did not independently exercise every theme/monitor orientation, long-name combination, or native picker selection. No real Google upload, new consent/reauthentication, or real-user MIME-default mutation was performed. Existing 0.1.0 limitations remain: fresh-user Google consent, live XLSX/PPTX browser landing behavior, and installation in a separate clean Quattro user profile are unverified.
 - The website's source version is updated to 0.1.1; Pages deployment is separate and is not part of this plugin release.
+
+## Version 0.1.2 panel release validation — September 22, 2026
+
+This release candidate narrows the panel to 380 theme pixels and adopts Omarchy's compact header, section labels, separators, and denser neutral actions. It does not change upload, account, OAuth, file, MIME, or persistence behavior. The permanent plugin ID remains `io.github.pablousx.omadocs`.
+
+- **94 Python tests passed** outside the filesystem/network sandbox, with no skipped tests. The sandboxed attempt was intentionally disregarded because local socket creation and multiprocessing were denied; all eight sandbox-only socket failures passed in the unrestricted rerun.
+- **28 QtTest passes**, QML validation without warnings, official plugin validation, static-site checks, release checks, and `git diff --check` passed.
+- The development plugin was reinstalled before capture and reported version 0.1.2 from runtime digest `8a6b82e0c9eccd67`. Uploads, uploaded copies, account management, paused-account recovery, Settings, keyboard tab switching, and authentication/account-choice states were inspected in the installed panel.
+- Refreshed repository captures contain only fictional fixture accounts and files and crop exactly to the panel. `preview.png` matches the uploaded-copies capture. No full-desktop image was added.
+- No live Google request, new consent flow, upload, or real-user MIME-default change was performed. The MIME association files retained their pre-test SHA-256 values, and the isolated UI fixture did not use the real journal or keyring. Fresh-user consent and live XLSX/PPTX browser landing behavior remain unverified.
+- Distribution archive, extracted-package, reproducibility, PR/CI, Pages, GitHub Release, and marketplace verification are separate gates to be completed against the final reviewed commit. Nothing in this 0.1.2 preparation record constitutes publication.

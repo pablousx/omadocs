@@ -11,7 +11,7 @@ ColumnLayout {
     required property var controller
     readonly property var bridge: controller.bridge
     readonly property string expandedAccount: controller.managedAccount
-    spacing: Style.space(10)
+    spacing: Style.space(8)
     function updateRows() { Logic.syncRows(rows, bridge.snapshot.accounts) }
     function reveal(item) {
         var pos = item.mapToItem(list.contentItem, 0, 0)
@@ -23,7 +23,7 @@ ColumnLayout {
     ListModel { id: rows; dynamicRoles: true }
     RowLayout {
         Layout.fillWidth: true
-        UiText { text: "Google accounts"; font.pixelSize: Style.space(13); Layout.fillWidth: true }
+        UiText { text: "Google accounts"; section: true; Layout.fillWidth: true }
         UiAction {
             text: root.bridge.snapshot.authentication.busy ? "Connecting…" : "Connect account"
             primary: true
@@ -32,6 +32,7 @@ ColumnLayout {
             onClicked: root.controller.addAccount()
         }
     }
+    UI.PanelSeparator { Layout.fillWidth: true; foreground: Color.foreground }
     UiText {
         Layout.fillWidth: true
         visible: !root.controller.currentAccount && rows.count > 0
@@ -57,7 +58,7 @@ ColumnLayout {
             clip: true
             visible: rows.count > 0
             model: rows
-            spacing: Style.space(14)
+            spacing: Style.space(10)
             boundsBehavior: Flickable.StopAtBounds
             QQC.ScrollBar.vertical: QQC.ScrollBar { policy: QQC.ScrollBar.AsNeeded }
             delegate: Column {
@@ -71,7 +72,7 @@ ColumnLayout {
                 readonly property bool busy: root.bridge.isBusy("accounts.remove", record.id) || root.bridge.isBusy("accounts.rename", record.id) || root.bridge.isBusy("accounts.enable", record.id) || root.bridge.isBusy("accounts.disable", record.id) || root.bridge.isBusy("accounts.set-default", record.id)
                 width: list.width - Style.space(12)
                 spacing: Style.space(7)
-                Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width; visible: account.index > 0 }
+                UI.PanelSeparator { width: parent.width; visible: account.index > 0; foreground: Color.foreground }
                 RowLayout {
                     width: parent.width
                     UiText { Layout.fillWidth: true; text: account.record.label; font.pixelSize: Style.space(13); maximumLineCount: 2; elide: Text.ElideRight }

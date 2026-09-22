@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC
 import qs.Commons
+import qs.Ui as UI
 import "UiLogic.js" as Logic
 
 ColumnLayout {
@@ -14,7 +15,7 @@ ColumnLayout {
     property int visibleLimit: 50
     property double now: Date.now()
     readonly property int matchingCount: Logic.visibleJobs(bridge.snapshot.operations, controller.activityFilter, 2000).length
-    spacing: Style.space(10)
+    spacing: Style.space(8)
     function updateRows() { Logic.syncRows(rows, Logic.visibleJobs(bridge.snapshot.operations, controller.activityFilter, visibleLimit)) }
     function reveal(item) {
         var pos = item.mapToItem(list.contentItem, 0, 0)
@@ -36,7 +37,7 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
-        UiText { Layout.fillWidth: true; text: root.bridge.snapshot.active ? root.bridge.snapshot.active + " in progress" : "Your uploads"; font.pixelSize: Style.space(13) }
+        UiText { Layout.fillWidth: true; text: root.bridge.snapshot.active ? "Uploads · " + root.bridge.snapshot.active + " in progress" : "Uploads"; section: true }
         UiAction {
             text: root.controller.selectingFiles ? "Choosing files…" : root.bridge.isBusy("open") ? "Preparing files…" : "Upload files…"
             primary: true
@@ -46,6 +47,7 @@ ColumnLayout {
             onClicked: root.controller.chooseFiles()
         }
     }
+    UI.PanelSeparator { Layout.fillWidth: true; foreground: Color.foreground }
     Flow {
         Layout.fillWidth: true
         spacing: Style.space(6)
@@ -93,7 +95,7 @@ ColumnLayout {
             clip: true
             visible: rows.count > 0
             model: rows
-            spacing: Style.space(14)
+            spacing: Style.space(10)
             boundsBehavior: Flickable.StopAtBounds
             QQC.ScrollBar.vertical: QQC.ScrollBar { policy: QQC.ScrollBar.AsNeeded }
             delegate: Column {
@@ -106,7 +108,7 @@ ColumnLayout {
                 readonly property bool sourceError: ["local_file", "source_changed"].indexOf(record.error) >= 0 && record.state === "failed"
                 width: list.width - Style.space(12)
                 spacing: Style.space(6)
-                Rectangle { height: 1; color: Qt.alpha(Color.foreground, 0.10); width: parent.width; visible: job.index > 0 }
+                UI.PanelSeparator { width: parent.width; visible: job.index > 0; foreground: Color.foreground }
                 RowLayout {
                     width: parent.width
                     UiText { text: "\uf15c"; color: Color.accent; Layout.alignment: Qt.AlignTop }

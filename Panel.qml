@@ -16,7 +16,7 @@ UI.Panel {
     property int tab: 0
     readonly property bool selectingFiles: picker.busy
     property bool visited: false
-    property int sessionHeight: 510
+    property int sessionHeight: 500
     property string settingsSection: ""
     property string credentialDraft: ""
     property string editingAccount: ""
@@ -39,7 +39,7 @@ UI.Panel {
     }
     function fitHeight() {
         var count = bridge.snapshot.operations.length
-        sessionHeight = tab === 0 ? (count <= 1 ? 470 : 620) : 590
+        sessionHeight = tab === 0 ? (count <= 1 ? 450 : 590) : 560
     }
     function navigate(index) { tab = index }
     function googleSetup() { settingsSection = "google"; tab = 2 }
@@ -120,7 +120,7 @@ UI.Panel {
         bar: root.bar
         open: root.opened
         focusTarget: keys
-        contentWidth: fittedContentWidth(Style.space(440))
+        contentWidth: fittedContentWidth(Style.space(380))
         contentHeight: fittedContentHeight(Style.space(root.sessionHeight), Style.space(650))
 
         UI.PanelKeyCatcher {
@@ -136,28 +136,39 @@ UI.Panel {
             }
             ColumnLayout {
                 anchors.fill: parent
-                spacing: Style.space(14)
-                RowLayout {
+                spacing: Style.space(12)
+                Item {
                     Layout.fillWidth: true
-                    spacing: Style.space(10)
-                    UiText { text: "\uf15c"; font.pixelSize: Style.space(21) }
-                    UiText { text: "omadocs"; font.pixelSize: Style.space(21); Layout.fillWidth: true }
-                    UiText { text: "OFFICE TO DRIVE"; font.pixelSize: Style.space(9); font.letterSpacing: 1; secondary: true }
-                }
-                Rectangle {
-                    Layout.fillWidth: true
-                    implicitHeight: statusContent.implicitHeight + Style.space(26)
-                    radius: Style.space(8)
-                    color: Qt.alpha(Color.accent, 0.07)
-                    border.color: Qt.alpha(Color.accent, 0.16)
+                    implicitHeight: Math.max(heroIcon.implicitHeight, heroLabels.implicitHeight)
+                    UiText {
+                        id: heroIcon
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "\uf15c"
+                        font.pixelSize: root.themeFont.display
+                        opacity: root.bridge.connected ? 1 : 0.5
+                    }
                     Column {
-                        id: statusContent
-                        anchors { top: parent.top; left: parent.left; right: parent.right; margins: Style.space(13) }
-                        spacing: Style.space(6)
-                        UiText { width: parent.width; text: root.bridge.connected ? "Your files, in Drive" : "Connecting…"; font.pixelSize: Style.space(16); color: Color.accent }
-                        UiText { width: parent.width; text: root.destination; secondary: true }
+                        id: heroLabels
+                        anchors.left: heroIcon.right
+                        anchors.leftMargin: Style.space(14)
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: Style.space(2)
+                        UiText { width: parent.width; text: "omadocs"; font.pixelSize: root.themeFont.title; font.bold: true; elide: Text.ElideRight }
+                        UiText {
+                            width: parent.width
+                            text: (root.bridge.connected ? root.destination : "Connecting…").toUpperCase()
+                            font.pixelSize: root.themeFont.caption
+                            font.bold: true
+                            font.letterSpacing: 1.2
+                            secondary: true
+                            elide: Text.ElideRight
+                            maximumLineCount: 1
+                        }
                     }
                 }
+                UI.PanelSeparator { Layout.fillWidth: true; foreground: Color.foreground }
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: Style.space(4)

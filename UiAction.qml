@@ -16,10 +16,10 @@ QQC.Button {
     property bool leftAlign: false
     property bool link: false
     property string tooltipText: ""
-    readonly property color tint: destructive ? Color.urgent : primary || selected || link ? Color.accent : Color.foreground
-    implicitHeight: Math.max(Style.space(38), label.implicitHeight + Style.space(18))
-    implicitWidth: Math.max(Style.space(link ? 0 : 80), label.implicitWidth + Style.space(24))
-    padding: Style.space(12)
+    readonly property color tint: destructive ? Color.urgent : Color.foreground
+    implicitHeight: Math.max(Style.space(32), label.implicitHeight + Style.space(14))
+    implicitWidth: Math.max(Style.space(link ? 0 : 64), label.implicitWidth + Style.space(20))
+    padding: Style.space(10)
     activeFocusOnTab: true
     hoverEnabled: true
     QQC.ToolTip.visible: hovered && tooltipText !== ""
@@ -38,9 +38,9 @@ QQC.Button {
         wrapMode: Text.WordWrap
     }
     background: Rectangle {
-        radius: Style.space(6)
-        color: Qt.alpha(root.tint, root.down ? 0.22 : root.hovered ? 0.14 : root.primary || root.selected ? 0.10 : root.link ? 0 : 0.045)
-        border.color: root.activeFocus ? Color.accent : Qt.alpha(root.tint, root.primary || root.selected ? 0.45 : root.link ? 0 : 0.15)
+        radius: Style.space(4)
+        color: Qt.alpha(root.tint, root.down ? 0.20 : root.hovered ? 0.10 : root.primary || root.selected ? 0.13 : 0)
+        border.color: root.link ? "transparent" : root.activeFocus ? Color.accent : Qt.alpha(root.tint, root.primary || root.selected ? 0.42 : 0.24)
         Behavior on color { ColorAnimation { duration: 100 } }
     }
     HoverHandler { cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor }
