@@ -8,6 +8,8 @@ import subprocess
 import sys
 import tomllib
 
+sys.dont_write_bytecode = True
+
 root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(root))
 from omadocs import VERSION, PLUGIN_ID
@@ -33,12 +35,20 @@ if not args.custom_setup or client_path.exists():
         bundled_client(client_path)
     except Fault:
         errors.append('A valid bundled Desktop client is required for built-in sign-in.')
-tracked = subprocess.check_output(['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], cwd=root).split(b'\0')
-for raw in tracked:
-    if not raw:
-        continue
-    name = raw.decode()
-    path = root/name
+listing = subprocess.run(
+    ['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'],
+    cwd=root,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.DEVNULL,
+)
+if listing.returncode == 0:
+    release_paths = [root/raw.decode() for raw in listing.stdout.split(b'\0') if raw]
+else:
+    # A release ZIP deliberately has no .git directory. In that case every
+    # extracted file is part of the publication boundary and must be checked.
+    release_paths = sorted(path for path in root.rglob('*') if path.is_file() or path.is_symlink())
+for path in release_paths:
+    name = path.relative_to(root).as_posix()
     if path.is_symlink():
         errors.append('Symlink in release: '+name)
     if not path.is_file():

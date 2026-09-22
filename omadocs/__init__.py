@@ -1,5 +1,5 @@
 """omadocs: one invocation, one new Drive copy; never synchronization."""
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 PLUGIN_ID = "io.github.pablousx.omadocs"
 
 

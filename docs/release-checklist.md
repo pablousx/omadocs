@@ -28,6 +28,8 @@
 
 ## Distribution
 
+- [ ] Build the versioned source ZIP and license copy from the reviewed clean commit with `python scripts/build-release.py`; build twice and confirm identical SHA-256 output.
+- [ ] Inspect the ZIP inventory, extract it to a temporary directory, run plugin/release validation there, and confirm the embedded license matches the release asset.
 - [ ] Review license, README, ADR, threat model, troubleshooting, development/uninstall instructions, and screenshot checklist.
 - [ ] Record remaining limitations honestly in `docs/validation.md`.
 - [ ] Obtain explicit permission before publishing the Git repository, tagging/pushing a release, or submitting to a plugin directory.
